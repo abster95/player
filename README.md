@@ -1,18 +1,36 @@
-# Player
+#Intro
 
-JavaFX based audio player application.
-Aims:
-- customizability - allow user use the application how he wants, lots of settings, skins, etc.
-- modular user interface - ability to 'make your own gui'
-- support fancy features like: rating in tag, time comments, big images, advanced & intuitive library management
-- no library dependence(moving & renaming files will not result in loss of any information)
-- usability - efficient gui & workflow
-- responsive - fast and responsive gui, no modal dialogs, etc.
-- sexy
+## What is this
+
+  The <b>Player</b> or <b>PlayerFX</b> is a desktop audio player and audio management application, which also turned into sort of dynamic module system - a multipurpose extensible application capable of compiling and running custom java widgets.
+
+I did not scare you away with that, did I?
+
+## Am I the target group?
+
+There are two reasons to be interested in this project:
+- as an <b>audio management system</b>. You may ask, why another audio player? Because there is significant lack of such application for a power user. It's not just about hitting a play button. Ever wanted to use timed comment? Ever lost your entire library song ratings due to corrupted database file? Ever needed multiple playlists or display/manipulate your songs in a way that just wasnt possible for some reason? This audioplayer addresses a lot of such issues.
+
+- as a <b>multiapplication</b> - collection of unrelated miniapplications. Image browser, movie explorer, file renamer and more. And if you know java, you can make your own app with simple text editor and literaly dozen lines of code - without java, without IDE and without hassles of creating and deploying your application - just write your code, hit save and watch as it autocompiles and runs as widget, which you can run as a standalone application! All that with included support for configurations, skins and everything else.
+
+## Motto
+
+- <b>Customizability</b> - User uses the application how he wants, not how it was designed to be used. Therefore emphasis on customization, skins, settings, etc.
+- <b>Portability</b> - No installation (or need for java or other programs), run from anywhere, little/no trace, everything is packaged along (no hunting your library database file in hidden Windows directories... 
+- <b>Modular functionality</b> - User can launch or use only selected components he is interested in and ignore everything else as if it was never there.
+- <b>Modular user interface</b> - User has the ability to 'make his own gui'. Completely custom component layout. He can create all-in-one GUI or use separate windows or - anything really.
+- <b>Fancy features</b> like: rating in tag, time comments, good image support, advanced & intuitive library management, etc.
+- <b>Library independence<b> - Moving & renaming files will not result in loss of any information. Every single bit is in the tag. Always. If you move on to different application or lose your library - you never lose data. Ever again.
+- <b>Usability</b> - Ease of use and efficient workflow due to minimalistic and unobtursive graphical user interface design. Think shortcuts, swiping, icons instead buttons, closing with right click instead of trying to hit small button somewhere in the corner of whatever you are doing..., etc.
+- <b>Responsive</b> - fast and responsive. Minimal modal dialogs. No more stuck windows while your library is scanning that big fat audio collection of yours.
+- <b>Sexy</b> - your way of sexy if you know tiny bit about css.
+
+  Okey, okey so now, what can this application actually do?
+Glad you asked.
 
 ## Features
 
-###Playback 
+### Play audio 
 
 Filetypes:
 - mp3, mp4, m4a, wav, ogg, flac
@@ -20,54 +38,68 @@ Filetypes:
 
 Protocols:
 - file
-- http: playback over internet (no flac & ogg)
+- http: playback over internet. The support is limited to what javaFX can currently do (no flac & ogg).
 
-###Media library 
-  
+###Manage audio files
+
 Song database:
-- small footprint: roughly about 10MB for 20000 files
+- small footprint: in 10s of MBs for 10000s audio files
 - big: 40000 files no problem
-- fast: library is loaded into main memory.
-- no dependency: song files always store all data in their tag, moving or renaming files poses no problem
-- no inconsistencies: displayed song metadata can only be out of sync with real data if tag is edited by external application
-- no data loss guarantee: losing database has no effect at all, it can be completely rebuilt anytime. The library serves as a cache, rather than storage.
+- fast: library is loaded into main memory (RAM).
+- no dependency: song files always store all data in their tag, moving or renaming files poses no problem.
+- no inconsistencies: displayed song metadata can only be out of sync with real data if tag is edited by external application (or as a result of a bug)
+- no data loss guarantee: losing database has no effect at all, it can be completely rebuilt anytime. The library serves as a persistable cache, not as data storage.
 
-Song tables:
-- big: 30000 songs in playlist no problem
-- smart columns: set visibility, width, sorting, order of any column for any song attribute
-- visual searching: by any (textual) attribute (artist, composer, title, etc). Scrolls 1st match (to center) and highlights matches - so they 'pop' visually - the result is very convenient search, particularly on presorted tables.
-- powerful filtering - by any attribute, infinitely chainable, custom queries, negation, etc 
-- group by - e.g. table of songs per year, artist, etc. Searching, filtering and sorting fully supported.
+  Management system is only as good as its user interface. There are powerful tables that try to be as flexible as possible. Some of the capabilities that <b>every</b> table boasts:
+- big: 30000 songs in playlist no problem (although good luck loading it at the app start...)
+- smart columns: set visibility, width, sorting (multiple column), order of any column for any song attribute
+- visual searching: by any (textual) attribute (artist, composer, title, etc) simply by writing. Scrolls 1st match (to center) and highlights matches - so they 'pop' visually - shich doesnt strain your eyes that much. Its fast (no CTRL+F, just type...) and convenient.
+- powerful filtering - CTRL+F. Shows only matches. Filtering here is basically constructing logical predicates (e.g.: 'year' 'less than' '2004') and it is possible to use <b>any</> combination of attributes (columns), 'comparators' and permissible values. Filters can be inverted (negation) or chained (conjunction).
+- group by - e.g. table of groups of songs per attribute (e.g. year or artist) Searching, filtering and sorting fully supported of course.
 - multiple column sorting by any attribute (artist, year, rating, bitrate, etc)
-- cascading - link tables to other tables as filters and display only selected items (e.g. show songs by authors selected in linked table)
+- cascading - link tables to other tables as filters and display only selected items (e.g. show songs of autor A's  albums X,D,E in year Y in three linked tables reacting on table selection). Basically library widgets allow linking selection of the table as an input, while simultaneously providing its selection as an output to other tables. Use however library widgets (each having 1 table) you wish and link them up in any way you want.
 
-###Tag editing
+###Audio tag editing
 
-  Application supports reading and writing song tag information, individually or for number of songs at once. The supported are all standard fields (e.g. artist or title), but also rating, playcount, color or timed comments. The aim is to be interoperable with other players. Noteworthy or nonstandard supported tags include:
+Application supports 
+- <b>reading</b>
+- <b>writing</b>
+
+of song tags
+
+- individually
+- by group (either using Tagger to tag single value to tag field of multiple songs (songs may share an artist) or Converter to write different value for each song (songs dont share title).
+
+The supported are:
+- all file types (see at the top), including wma and mp4 (which normally can not have a tag)
+- all fields (comprehensive list later), including rating, playcount, color, timed comments.
+
+The aim is to be interoperable with other players, where possible. Noteworthy or nonstandard supported tags include:
 
   **Rating** 
-- values are in percent values forget implementation detail (mp3 max=255, flac/ogg max=100)
-- seamless values. Forget limiting scales like 1-5. Use full granularity (limited only by tag (1/255 for mp3, 1/100 for other formats)) and decide your own visual representation (progress bar or any number of "stars" you want)
-- interoperable with other players (POPM frame), but most of them will only recognize the value as 3/5 or so.
+- values are in percent values independent of implementation (mp3=0-255, flac/ogg=0-100)
+- floating values (0-1). Values like {1,2,3,4,5} are obsolete, illogical and nobody agrees on what they mean. Use full granularity (limited only by tag (1/255 for mp3, 1/100 for other formats)) and pick graphical representation (progress bar or any number of "stars" you want). Basically rate 1) how you want 2) all audio types the same 3) be happy the value is in the tag 4) visualie the rating value as you want - be it 3 stars or 10 or a progress bar.
+- interoperable with other players (POPM frame), but most of them will only recognize the value in their own way
   
   **Playcount**
-- number of times the song has been played (the exact definition is left upon the user, who can set up the playcount incrementation behavior arbitrarily, or edit the value manually (increment/decrement/set arbitrary number - its your collection, excert your power).
+- number of times the song has been played (the exact definition is left upon the user, who can set up the playcount incrementation behavior arbitrarily, or edit the value manually (increment/decrement/set arbitrary number - its your collection, excert your power!).
 - the data are written in custom tag (in mp3, writen duplicitly in POPM frame counter)
   
-  **Chapters**
-- comments associated with specific time/part of the song. They can be added during playback on the seeker and browsed as popup menus. The length of the comment should be a non-issue (the upper value is unknown, but at least 500 characters (for all chapters together), very likely a lot more).
+  **Time comments/chapters**
+- comments associated with specific time/part of the song. They can be added during playback on the seeker and viewed in popup menus. The length of the comment should be a non-issue (the upper value is unknown, but should be enough).
 - The gui makes it really easy to add or edit these and takes no space, since it is using seeker bar and popup windows.
 - the data are written in custom tag
-- 
-  **Chapters**
-- just in case you associate some songs with a color...
+
+  **Color**
+- just in case you want to associate songs with a colors, you can.
+- using custom tag
 
   **Cover**
-- image in tag can be imported/exported
+- image in tag can be imported/exported (but I advise against placing images in audio tags, it is impractical (large space requirements - it adds up..) and semantically incorrect (cover is album metadata, not song metadata)).
 - cover read from file location is supported too, looking for image files named:
-  - song title
-  - song album
-  - "cover" or "folder"
+  - song title.filetype
+  - song album.filetype
+  - cover.filetype or folder.filetype
   
 ### Configurability
 
@@ -75,7 +107,8 @@ Song tables:
 
 ### Modularity
 
-  Most of the functionalitiess are implemented as widgets, that can be loaded, closed, moved and configured separately. Multiple instances of the same widget can run at once in windows, layouts or popups. New widgets can be added as plugins.
+  Most of the functionalitiess are implemented as widgets, that can be loaded, closed, moved and configured separately. Multiple instances of the same widget can run at once in windows, layouts or popups. Widgets' source files can be created and edited in runtime and any changes will be immediatelly reflected in the application. This means that if you are a developer you just edit the file, hit save and watch as the witgets are reloaded with previous state and configuration. 
+  
   Some of the existing widgets are:
 - Playback & Mini - controls for playback, like seeking. Supports chapters.
 - FileInfo - shows cover and information about song (e.g. playing). Allows cover download on drag&drop.
