@@ -138,9 +138,9 @@ This makes it possible to import song titles from copypasted tracklist found on 
   - displays hierarchies:
     - application modules
     - file system
-    - scene graph (this is taking the idea from the ScenicView app and works basically the same). When used with the combination of Settings widget its a great way to debug the application scenegraph (yeahm from within the application)
+    - scene graph (this is taking the idea from the ScenicView app and works basically the same). When used with the combination of Settings widget its a great way to debug the application scenegraph (yeah from within the application)
 - <b>Logger</b>
-  - displays System.out in a TextArea. For developers)
+  - displays System.out in a TextArea. For developers
 - <b>IconBox</b>
   - configurable icon bar/dock. User can add/remove custom icons executing some predefined.
 - <b>FunctionViewer</b>
@@ -227,9 +227,47 @@ Platforms:
 
 ## Screenshots
 
-![ScreenShot](/extra/screenshot1.png)
 
-![ScreenShot](/extra/screenshot3.png)
+
+![ScreenShot](/extra/screenshot_playlists.jpg)
+Depicts:
+- multiple playlists
+- drag&drop on 2nd playlist
+- time comment displayed in the popup
+
+![ScreenShot](/extra/screenshot_actions.jpg)
+
+Depicts:
+- application support action menu
+- 'glass' effect
+
+![ScreenShot](/extra/screenshot_layoutmode.jpg)
+
+Depicts:
+- layout mode
+- widget input-output links
+
+![ScreenShot](/extra/screenshot_widgets.jpg)
+
+Depicts:
+- function plotting, audio spectrum, logger widgets
+- interactive guide
+- custom skin
+
+![ScreenShot](/extra/screenshot_comet1.jpg)
+
+![ScreenShot](/extra/screenshot_comet2.jpg)
+
+Depicts:
+- Comet game widget
+
+![ScreenShot](/extra/screenshot_old1.png)
+
+Depicts an old build of the application with an old skin.
+
+![ScreenShot](/extra/screenshot_old2.png)
+
+Depicts an old build of the application with an old skin.
 
 ## The Catch XXII
 
