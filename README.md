@@ -1,6 +1,6 @@
 #Intro
 
-## What is this
+## What is this?
 
   The <b>Player</b> or <b>PlayerFX</b> is a desktop audio player and audio management application, which also turned into sort of dynamic module system - a multipurpose extensible application capable of compiling and running custom java widgets.
 
@@ -23,7 +23,7 @@ There are two reasons to be interested in this project:
 - <b>Library independence</b> - Moving & renaming files will not result in loss of any information. Every single bit is in the tag. Always. If you move on to different application or lose your library - you never lose data. Ever again.
 - <b>Usability</b> - Ease of use and efficient workflow due to minimalistic and unobtursive graphical user interface design. Think shortcuts, swiping, icons instead buttons, closing with right click instead of trying to hit small button somewhere in the corner of whatever you are doing..., etc.
 - <b>Responsive</b> - fast and responsive. Minimal modal dialogs. No more stuck windows while your library is scanning that big fat audio collection of yours.
-- <b>Sexy</b> - your way of sexy if you know tiny bit about css.
+- <b>Sexy</b> - Your way of sexy if you know tiny bit about css.
 
   Okey, okey so now, what can this application actually do?
 Glad you asked.
@@ -32,13 +32,8 @@ Glad you asked.
 
 ### Play audio 
 
-Filetypes:
-- mp3, mp4, m4a, wav, ogg, flac
-- possibly more to come
-
-Protocols:
-- file
-- http: playback over internet. The support is limited to what javaFX can currently do (no flac & ogg).
+- mp3, mp4, m4a, wav, ogg, flac, possibly more to come
+- file, http (over internet, support is limited to what javaFX can currently do - no flac & ogg).
 
 ###Manage audio files
 
@@ -77,31 +72,26 @@ The supported are:
 - all fields (comprehensive list later), including rating, playcount, color, timed comments.
 
 The aim is to be interoperable with other players, where possible. Noteworthy or nonstandard supported tags include:
-
-  **Rating** 
-- values are in percent values independent of implementation (mp3=0-255, flac/ogg=0-100)
-- floating values (0-1). Values like {1,2,3,4,5} are obsolete, illogical and nobody agrees on what they mean. Use full granularity (limited only by tag (1/255 for mp3, 1/100 for other formats)) and pick graphical representation (progress bar or any number of "stars" you want). Basically rate 1) how you want 2) all audio types the same 3) be happy the value is in the tag 4) visualie the rating value as you want - be it 3 stars or 10 or a progress bar.
-- interoperable with other players (POPM frame), but most of them will only recognize the value in their own way
-  
-  **Playcount**
-- number of times the song has been played (the exact definition is left upon the user, who can set up the playcount incrementation behavior arbitrarily, or edit the value manually (increment/decrement/set arbitrary number - its your collection, excert your power!).
-- the data are written in custom tag (in mp3, writen duplicitly in POPM frame counter)
-  
-  **Time comments/chapters**
-- comments associated with specific time/part of the song. They can be added during playback on the seeker and viewed in popup menus. The length of the comment should be a non-issue (the upper value is unknown, but should be enough).
-- The gui makes it really easy to add or edit these and takes no space, since it is using seeker bar and popup windows.
-- the data are written in custom tag
-
-  **Color**
-- just in case you want to associate songs with a colors, you can.
-- using custom tag
-
-  **Cover**
-- image in tag can be imported/exported (but I advise against placing images in audio tags, it is impractical (large space requirements - it adds up..) and semantically incorrect (cover is album metadata, not song metadata)).
-- cover read from file location is supported too, looking for image files named:
-  - song title.filetype
-  - song album.filetype
-  - cover.filetype or folder.filetype
+- <b>Rating</b>
+  - values are in percent values independent of implementation (mp3=0-255, flac/ogg=0-100)
+  - floating values (0-1). Values like {1,2,3,4,5} are obsolete, illogical and nobody agrees on what they mean. Use full granularity (limited only by tag (1/255 for mp3, 1/100 for other formats)) and pick graphical representation (progress bar or any number of "stars" you want). Basically rate 1) how you want 2) all audio types the same 3) be happy the value is in the tag 4) visualie the rating value as you want - be it 3 stars or 10 or a progress bar.
+  - interoperable with other players (POPM frame), but most of them will only recognize the value in their own way
+- <b>Playcount</b>
+  - number of times the song has been played (the exact definition is left upon the user, who can set up the playcount incrementation behavior arbitrarily, or edit the value manually (increment/decrement/set arbitrary number - its your collection, excert your power!).
+  - the data are written in custom tag (in mp3, writen duplicitly in POPM frame counter)
+- <b>Time comments/chapters</b>
+  - comments associated with specific time/part of the song. They can be added during playback on the seeker and viewed in popup menus. The length of the comment should be a non-issue (the upper value is unknown, but should be enough).
+  - The gui makes it really easy to add or edit these and takes no space, since it is using seeker bar and popup windows.
+  - the data are written in custom tag
+- <b>Color</b>
+  - just in case you want to associate songs with a colors, you can.
+  - using custom tag
+- <b>Cover</b>
+  - image in tag can be imported/exported (but I advise against placing images in audio tags, it is impractical (large space requirements - it adds up..) and semantically incorrect (cover is album metadata, not song metadata)).
+  - cover read from file location is supported too, looking for image files named:
+    - song title.filetype
+    - song album.filetype
+    - cover.filetype or folder.filetype
   
 ### Configurability
 
