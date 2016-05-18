@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.*;
 import java.util.function.Consumer;
 
 import javafx.animation.FadeTransition;
@@ -110,6 +111,7 @@ import util.action.IsAction;
 import util.action.IsActionable;
 import util.animation.Anim;
 import util.animation.interpolator.ElasticInterpolator;
+import util.async.Async;
 import util.async.future.Fut;
 import util.conf.*;
 import util.dev.TODO;
@@ -758,56 +760,79 @@ public class App extends Application implements Configurable {
      * @return number of running instances
      */
     public static int getInstances() {
-        // Old impl. Obviously not working as it is. Left here for documentation sake as a resource.
-        // try {
-        //     MonitoredHost mh = MonitoredHost.getMonitoredHost("//localhost" );
-        //     for (int id : mh.activeVms() ) {
-        //         VmIdentifier vmid = new VmIdentifier("" + id);
-        //         MonitoredVm vm = mh.getMonitoredVm(vmid, 0 );
-        //         System.out.printf( "%d %s %s %s%n\n", id,MonitoredVmUtil.mainClass( vm, true ),
-        //                            MonitoredVmUtil.jvmArgs( vm ),MonitoredVmUtil.mainArgs( vm ) );
-        //     }
-        // } catch (MonitorException ex) {
-        //     java.util.logging.Logger.getLogger(App.class.getName()).log(Level.SEVERE, null, ex);
-        // } catch (URISyntaxException ex) {
-        //     java.util.logging.Logger.getLogger(App.class.getName()).log(Level.SEVERE, null, ex);
-        // }
-        // two occurrences of the result of MonitoredVmUtil.mainClass(), the program is started twice
+        LOGGER.info("Counting number of application instances...");
 
-        // We list all virtual machines (including this one) (each java app runs in its own vm) and
-        // check some property to determine what kind of app this is to count instances of this app.
-        //
-        // Note: I tried to inject some custom property into vm using
-        // vm.getAgentProeprties().setProperty(...)  but it appears to be read only. So we handle
-        // the recognition differently.
+        /*
+          Old impl. Obviously not working as it is. Left here for documentation sake as a resource.
+          try {
+              MonitoredHost mh = MonitoredHost.getMonitoredHost("//localhost" );
+              for (int id : mh.activeVms() ) {
+                  VmIdentifier vmid = new VmIdentifier("" + id);
+                  MonitoredVm vm = mh.getMonitoredVm(vmid, 0 );
+                  System.out.printf( "%d %s %s %s%n\n", id,MonitoredVmUtil.mainClass( vm, true ),
+                                     MonitoredVmUtil.jvmArgs( vm ),MonitoredVmUtil.mainArgs( vm ) );
+              }
+          } catch (MonitorException ex) {
+              java.util.logging.Logger.getLogger(App.class.getName()).log(Level.SEVERE, null, ex);
+          } catch (URISyntaxException ex) {
+              java.util.logging.Logger.getLogger(App.class.getName()).log(Level.SEVERE, null, ex);
+          }
+          two occurrences of the result of MonitoredVmUtil.mainClass(), the program is started twice
+          We list all virtual machines (including this one) (each java app runs in its own vm) and
+          check some property to determine what kind of app this is to count instances of this app.
+
+          Note: I tried to inject some custom property into vm using
+          vm.getAgentProperties().setProperty(...)  but it appears to be read only. So we handle
+          the recognition differently.
+        */
+
         int instances = 0;
         String ud = System.getProperty("user.dir");
-        for(VirtualMachineDescriptor vmd : VirtualMachine.list()) {
+        List<VirtualMachineDescriptor> vmds = VirtualMachine.list();
+        int vmdCount = vmds.size();
+        for (int i = 0; i<vmdCount; i++) {
+            VirtualMachineDescriptor vmd = vmds.get(i);
+            LOGGER.info("Examining {}/{} VM: ", i+1, vmdCount, vmd);
             try {
-                int i = 0;
                 VirtualMachine vm = VirtualMachine.attach(vmd);
+
+                boolean isInstance = false;
 
                 // attempt 1:
                 // User directory. Unfortunately nothing forbids user (or more likely
                 // developer) to copy-paste the app and run it from elsewhere). We want to
                 // defend against this as well.
                 String udir = vm.getSystemProperties().getProperty("user.dir");
-                if(udir!=null && ud.equals(udir)) i=1;
+                isInstance |= udir != null && ud.equals(udir);
 
                 // attempt 2:
                 // Injected custom property, !work. Read-only? Id like this to work though.
-                // if(vm.getAgentProperties().getProperty("apptype")!=null) i++;
+                // isInstance |= vm.getAgentProperties().getProperty("apptype")!=null;
 
                 // attempt3:
                 // We use command parameter which ends with the name of the executed jar. So far
                 // this works. Its far from perfect, since user/dev could rename the jar.
                 String command = vm.getAgentProperties().getProperty("sun.java.command");
-                if(command!=null && command.endsWith("Player.jar")) i=1;
+                isInstance |= command != null && command.endsWith("Player.jar");
 
-                instances += i;
+                if(isInstance) instances ++;
                 vm.detach();
-            } catch (AttachNotSupportedException | IOException ex) {
-                LOGGER.warn("Unable to inspect virtual machine {}", vmd);
+            } catch (AttachNotSupportedException | IOException e) {
+                // For example when attaching 32-bit agent to 64-bit VM process
+                LOGGER.warn("Unable to inspect virtual machine {}", vmd, e);
+            } catch(InternalError e) {
+                // Encountered when the target VM does not support attaching or is bugged.
+                // Can happen when the inspected VM is running/using jUnit or jMockit
+                // or IBM JDK (just to name few candidates).
+                // I have encountered InternalError alongside the mentioned thread starvation.
+                // Although this is probably due to a bug, we need to defend against it.
+                LOGGER.warn("Unable to inspect virtual machine {}", vmd, e);
+            } catch (Exception e) {
+                // We do not know what else may happen in extreme circumstances (see above), so
+                // we catch everything.
+                // We ignore VMs that can not be examined (most probably not instances of this
+                // application anyway).
+                LOGGER.warn("Unable to inspect virtual machine {}", vmd, e);
             }
         }
         return instances;
